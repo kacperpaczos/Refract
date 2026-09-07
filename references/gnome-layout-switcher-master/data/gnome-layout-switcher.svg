@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 105.83333 105.83334"
+   height="400"
+   width="400">
+  <defs
+     id="defs2" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-191.16665)"
+     id="layer1">
+    <circle
+       style="opacity:1;fill:#222d32;fill-opacity:1;stroke:none;stroke-width:0.55158478;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:10.63000011;stroke-opacity:1;paint-order:stroke fill markers"
+       id="circle857"
+       cx="52.916668"
+       cy="244.08331"
+       r="50.270836" />
+    <g
+       transform="translate(-0.31781102,0.48006253)"
+       id="g1863">
+      <path
+         style="fill:none;fill-opacity:1;stroke:#16a085;stroke-width:4.53047323;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+         d="m 66.879651,233.25464 15.042625,-15.21399 11.625971,10.04697"
+         id="path1858" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#16a085;stroke-width:4.53047323;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+         d="M 39.618031,254.03731 24.489475,269.16586 12.920591,259.05319"
+         id="path1856" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#16a085;stroke-width:4.53047323;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+         d="m 68.351559,244.08332 a 15.416783,15.416783 0 0 1 -15.416788,15.41677 15.416783,15.416783 0 0 1 -15.41677,-15.41677 15.416783,15.416783 0 0 1 15.41677,-15.41678 15.416783,15.416783 0 0 1 15.416788,15.41678 z"
+         id="path1836" />
+    </g>
+  </g>
+</svg>
+
+

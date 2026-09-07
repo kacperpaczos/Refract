@@ -1,0 +1,6 @@
+[submodule "references/linexin-desktop-presets"]
+	path = references/linexin-desktop-presets
+	url = https://github.com/Petexy/linexin-desktop-presets
+[submodule "references/kinexin-desktop"]
+	path = references/kinexin-desktop
+	url = https://github.com/Petexy/kinexin-desktop

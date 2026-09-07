@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+POLICY="/usr/share/polkit-1/actions/org.manjaro.org.TESTdev.policy"
+echo "run gnome-layout-switcher for dev"
+
+sudo cp -v ./data/org.manjaro.org.gnomelayoutswitcher.policy "$POLICY"
+#sudo sed
+new="$(pwd)/bin/gnome-layout-switcher"
+sudo sed -i "s|policykit.exec.path.*|policykit.exec.path\">$new<\/annotate>|" "$POLICY" # -i
+sudo sed -i 's|<description>.*</description>|<description>layout-switcher DEV as ADMIN</description>|' "$POLICY"
+sudo sed -i 's|<message>.*</message>|<message>TEST layout-switcher DEV as ADMIN</message>|' "$POLICY"
+sudo sed -i 's|<action id="org.manjaro.gnomelayoutswitcher.admin">|<action id="org.manjaro.layout-dev.admin">|' "$POLICY"
+
+cat "$POLICY"
+#sudo -k
+./bin/gnome-layout-switcher
+
+#echo "rm .policy"
+sudo rm -v "$POLICY"
