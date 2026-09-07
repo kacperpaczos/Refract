@@ -1,0 +1,54 @@
+id: gnome
+label: GNOME (Vanilla)
+preview: gnome
+description: Czyste i klasyczne środowisko GNOME.
+spec_version: 1
+provider: upstream-gnome
+variant: vanilla
+capabilities_required:
+  - gsettings
+  - extensions.disable
+  - bash
+capabilities_optional:
+  - health_checks
+  - preflight_checks
+degraded_behavior: Continue without shell customizations if only partial disable succeeds.
+rollback_policy: snapshot
+desktops:
+  gnome:
+    preflight_checks:
+      - type: bash
+        command: "command -v gsettings >/dev/null"
+    health_checks:
+      - type: gsetting_check
+        schema: org.gnome.desktop.wm.preferences
+        key: button-layout
+        expected: "':minimize,maximize,close'"
+    steps:
+      - type: bash
+        command: "gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'"
+
+      - type: extension.disable
+        id: dash-to-dock@micxgx.gmail.com
+      - type: extension.disable
+        id: arcmenu@arcmenu.com
+      - type: extension.disable
+        id: gtk4-ding@smedius.gitlab.com
+      - type: extension.disable
+        id: dash-to-panel@jderose9.github.com
+      - type: extension.disable
+        id: places-menu@gnome-shell-extensions.gcampax.github.com
+      - type: extension.disable
+        id: material-shell@papyelgringo
+      - type: extension.disable
+        id: window-list@gnome-shell-extensions.gcampax.github.com
+      - type: extension.disable
+        id: appindicatorsupport@rgcjonas.gmail.com
+      - type: extension.disable
+        id: no-overview@fthx
+      - type: extension.disable
+        id: gnome-ui-tune@itstime.tech
+      - type: extension.disable
+        id: forge@jmmaranan.com
+      - type: extension.disable
+        id: space-bar@luchrioh

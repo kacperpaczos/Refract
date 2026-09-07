@@ -1,0 +1,78 @@
+id: unity_left_dock
+label: Unity Left Dock (Bundled)
+preview: unitypreview.png
+description: Layout Unity z bundlowanymi rozszerzeniami Ubuntu.
+spec_version: 1
+provider: synthesis
+variant: unity-left-dock
+capabilities_required:
+  - dconf
+  - gsettings
+  - extensions.disable
+  - gnome.shell_reload
+capabilities_optional:
+  - preflight_checks
+  - health_checks
+degraded_behavior: Keep left dock and core shell behavior even if optional Unity extras fail.
+rollback_policy: snapshot
+desktops:
+  gnome:
+    post_flight_wait_ms: 2000
+    preflight_checks:
+      - type: bash
+        command: "command -v dconf >/dev/null"
+      - type: bash
+        command: "command -v gsettings >/dev/null"
+    health_checks:
+      - type: bash
+        command: "gsettings get org.gnome.shell enabled-extensions | grep -q 'ubuntu-dock@ubuntu.com'"
+    steps:
+      - type: extension.install_bundled
+        id: ubuntu-dock@ubuntu.com
+        source: bundled-extensions/unity/ubuntu-dock@ubuntu.com
+      - type: extension.install_bundled
+        id: ubuntu-appindicators@ubuntu.com
+        source: bundled-extensions/unity/ubuntu-appindicators@ubuntu.com
+      - type: extension.install_bundled
+        id: ding@rastersoft.com
+        source: bundled-extensions/unity/ding@rastersoft.com
+      - type: dconf
+        path: /org/gnome/
+        action: load
+        data: |
+          [shell/extensions/dash-to-dock]
+          apply-custom-theme=false
+          dash-max-icon-size=44
+          dock-fixed=true
+          dock-position='LEFT'
+          extend-height=true
+          intellihide=false
+          multi-monitor=false
+          show-apps-at-top=true
+          show-mounts=false
+          show-show-apps-button=true
+
+          [desktop/interface]
+          enable-animations=true
+
+          [desktop/wm/preferences]
+          button-layout='close,minimize,maximize:'
+      - type: gnome.shell_reload
+        wait_ms: 2500
+      - type: extension.disable
+        id: arcmenu@arcmenu.com
+      - type: extension.disable
+        id: dash-to-panel@jderose9.github.com
+      - type: extension.disable
+        id: material-shell@papyelgringo
+      - type: extension.disable
+        id: dash-to-dock@micxgx.gmail.com
+      - type: extension.disable
+        id: appindicatorsupport@rgcjonas.gmail.com
+      - type: extension.disable
+        id: gtk4-ding@smedius.gitlab.com
+      - type: extension.disable
+        id: forge@jmmaranan.com
+      - type: extension.disable
+        id: space-bar@luchrioh
+

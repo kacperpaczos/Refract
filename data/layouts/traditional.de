@@ -1,0 +1,94 @@
+id: traditional
+label: Traditional
+preview: traditional
+description: Klasyczny układ kaskadowy z paskiem dolnym
+spec_version: 1
+provider: upstream-gnome
+variant: traditional
+capabilities_required:
+  - dconf
+  - extensions.install
+  - extensions.disable
+  - gnome.shell_reload
+capabilities_optional:
+  - health_checks
+  - preflight_checks
+degraded_behavior: Apply core shell preferences even if some optional extensions fail.
+rollback_policy: snapshot
+desktops:
+  gnome:
+    min_version: '40'
+    post_flight_wait_ms: 1500
+    preflight_checks:
+      - type: bash
+        command: "command -v dconf >/dev/null"
+      - type: bash
+        command: "command -v gsettings >/dev/null"
+    health_checks:
+      - type: gsetting_check
+        schema: org.gnome.desktop.wm.preferences
+        key: button-layout
+        expected: "':minimize,maximize,close'"
+      - type: bash
+        command: "gsettings get org.gnome.shell enabled-extensions | grep -q 'dash-to-panel@jderose9.github.com'"
+    steps:
+      # Instalacja rozszerzeń (gext install = automatycznie włącza w dconf)
+      - type: extension.install
+        id: dash-to-panel@jderose9.github.com
+      - type: extension.install
+        id: arcmenu@arcmenu.com
+      - type: extension.install
+        id: appindicatorsupport@rgcjonas.gmail.com
+      - type: extension.install
+        id: gnome-ui-tune@itstime.tech
+      - type: extension.install
+        id: gtk4-ding@smedius.gitlab.com
+
+      # Konfiguracja środowiska omijająca dconf schemas cache
+      - type: dconf
+        path: /org/gnome/
+        action: load
+        data: |
+          [shell/extensions/dash-to-panel]
+          panel-element-positions='{"0":[{"element":"showAppsButton","visible":false,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"stackedTL"},{"element":"centerBox","visible":true,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"stackedBR"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}'
+          panel-position='BOTTOM'
+          show-running-apps=true
+          panel-size=48
+
+          [shell/extensions/arcmenu]
+          custom-menu-button-icon-size=32.0
+          menu-button-appearance='Icon'
+          dash-to-panel-standalone=false
+          menu-layout='Default'
+          menu-button-icon='Distro_Icon'
+          distro-icon=3
+          hide-overview-on-startup=true
+
+          [desktop/wm/preferences]
+          button-layout=':minimize,maximize,close'
+
+      # Czekamy aż powłoka GNOME podniesie konfigurację i odświeży system
+      - type: gnome.shell_reload
+        wait_ms: 3000
+
+      # Wyłącz konflikty
+      - type: extension.disable
+        id: dash-to-dock@micxgx.gmail.com
+      - type: extension.disable
+        id: material-shell@papyelgringo
+      - type: extension.disable
+        id: forge@jmmaranan.com
+      - type: extension.disable
+        id: space-bar@luchrioh
+
+  kde:
+    min_version: '5.0'
+    preflight_checks:
+      - type: bash
+        command: "command -v bash >/dev/null"
+    health_checks:
+      - type: bash
+        command: "true"
+    steps:
+      - type: bash
+        command: "echo 'Traditional mode for KDE is coming soon!'"

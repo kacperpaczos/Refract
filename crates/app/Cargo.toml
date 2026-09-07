@@ -1,0 +1,16 @@
+[package]
+name = "app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+domain.workspace = true
+infra.workspace = true
+serde = { workspace = true, features = ["derive"] }
+toml.workspace = true
+anyhow.workspace = true
+log.workspace = true
+uuid.workspace = true
+serde_yaml = "0.9.34"
+serde_json.workspace = true
+dirs.workspace = true

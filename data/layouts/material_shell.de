@@ -1,0 +1,43 @@
+id: material_shell
+label: Material Shell
+preview: material_shell
+description: Nowoczesne, zorganizowane i minimalistyczne środowisko
+spec_version: 1
+provider: upstream-gnome
+variant: material-shell
+capabilities_required:
+  - gsettings
+  - extensions.install
+  - extensions.disable
+capabilities_optional:
+  - health_checks
+  - preflight_checks
+degraded_behavior: Preserve basic shell defaults if Material Shell cannot be activated fully.
+rollback_policy: snapshot
+desktops:
+  gnome:
+    preflight_checks:
+      - type: bash
+        command: "command -v gsettings >/dev/null"
+    health_checks:
+      - type: gsetting_check
+        schema: org.gnome.desktop.wm.preferences
+        key: button-layout
+        expected: "':minimize,maximize,close'"
+      - type: bash
+        command: "gsettings get org.gnome.shell enabled-extensions | grep -q 'material-shell@papyelgringo'"
+    steps:
+      # Instalacja rozszerzenia (gext automatycznie włącza po instalacji)
+      - type: extension.install
+        id: material-shell@papyelgringo
+
+      - type: bash
+        command: "gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'"
+
+      # Wyłącz rozszerzenia konfliktujące (tylko te które mogą być zainstalowane)
+      - type: extension.disable
+        id: dash-to-dock@micxgx.gmail.com
+      - type: extension.disable
+        id: arcmenu@arcmenu.com
+      - type: extension.disable
+        id: dash-to-panel@jderose9.github.com

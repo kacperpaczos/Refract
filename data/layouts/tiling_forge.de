@@ -1,0 +1,66 @@
+id: tiling_forge
+label: Tiling Forge (Synthesis)
+preview: tiling
+description: Tiling workflow oparty o Forge i Space Bar.
+spec_version: 1
+provider: synthesis
+variant: tiling-forge
+capabilities_required:
+  - dconf
+  - gsettings
+  - extensions.install
+  - extensions.disable
+  - gnome.shell_reload
+capabilities_optional:
+  - preflight_checks
+  - health_checks
+degraded_behavior: Keep keyboard-oriented tiling even if auxiliary shell options fail.
+rollback_policy: snapshot
+desktops:
+  gnome:
+    post_flight_wait_ms: 2000
+    preflight_checks:
+      - type: bash
+        command: "command -v dconf >/dev/null"
+      - type: bash
+        command: "command -v gsettings >/dev/null"
+    health_checks:
+      - type: bash
+        command: "gsettings get org.gnome.shell enabled-extensions | grep -q 'forge@jmmaranan.com'"
+    steps:
+      - type: extension.install
+        id: arcmenu@arcmenu.com
+      - type: extension.install
+        id: forge@jmmaranan.com
+      - type: extension.install
+        id: space-bar@luchrioh
+      - type: extension.install
+        id: appindicatorsupport@rgcjonas.gmail.com
+      - type: extension.install
+        id: gnome-ui-tune@itstime.tech
+      - type: dconf
+        path: /org/gnome/
+        action: load
+        data: |
+          [shell/extensions/arcmenu]
+          menu-layout='GnomeOverview'
+          menu-button-icon='Distro_Icon'
+          distro-icon=3
+          custom-menu-button-icon-size=20
+
+          [shell/extensions/space-bar/shortcuts]
+          open-menu=@as []
+
+          [desktop/wm/preferences]
+          button-layout=':minimize,maximize,close'
+      - type: gnome.shell_reload
+        wait_ms: 2500
+      - type: extension.disable
+        id: dash-to-panel@jderose9.github.com
+      - type: extension.disable
+        id: dash-to-dock@micxgx.gmail.com
+      - type: extension.disable
+        id: ubuntu-dock@ubuntu.com
+      - type: extension.disable
+        id: material-shell@papyelgringo
+

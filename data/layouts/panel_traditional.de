@@ -1,0 +1,74 @@
+id: panel_traditional
+label: Panel Traditional (Winexin)
+preview: traditional
+description: Klasyczny panel dolny z ArcMenu, oparty o Winexin i Traditional.
+spec_version: 1
+provider: synthesis
+variant: linexin-winexin-traditional
+capabilities_required:
+  - dconf
+  - gsettings
+  - extensions.install
+  - extensions.disable
+  - gnome.shell_reload
+capabilities_optional:
+  - preflight_checks
+  - health_checks
+degraded_behavior: Keep panel workflow even if some optional shell components fail.
+rollback_policy: snapshot
+desktops:
+  gnome:
+    post_flight_wait_ms: 2000
+    preflight_checks:
+      - type: bash
+        command: "command -v dconf >/dev/null"
+      - type: bash
+        command: "command -v gsettings >/dev/null"
+    health_checks:
+      - type: bash
+        command: "gsettings get org.gnome.shell enabled-extensions | grep -q 'dash-to-panel@jderose9.github.com'"
+    steps:
+      - type: extension.install
+        id: dash-to-panel@jderose9.github.com
+      - type: extension.install
+        id: arcmenu@arcmenu.com
+      - type: extension.install
+        id: appindicatorsupport@rgcjonas.gmail.com
+      - type: extension.install
+        id: gtk4-ding@smedius.gitlab.com
+      - type: extension.install
+        id: gnome-ui-tune@itstime.tech
+      - type: dconf
+        path: /org/gnome/
+        action: load
+        data: |
+          [shell/extensions/dash-to-panel]
+          panel-element-positions='{"0":[{"element":"showAppsButton","visible":true,"position":"stackedBR"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"stackedTL"},{"element":"centerBox","visible":true,"position":"stackedTL"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"stackedBR"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}'
+          panel-position='BOTTOM'
+          panel-size=48
+          show-running-apps=true
+
+          [shell/extensions/arcmenu]
+          menu-layout='Windows'
+          menu-button-appearance='Icon'
+          custom-menu-button-icon-size=36.0
+
+          [desktop/wm/preferences]
+          button-layout=':minimize,maximize,close'
+      - type: gnome.shell_reload
+        wait_ms: 2500
+      - type: extension.disable
+        id: dash-to-dock@micxgx.gmail.com
+      - type: extension.disable
+        id: material-shell@papyelgringo
+      - type: extension.disable
+        id: forge@jmmaranan.com
+      - type: extension.disable
+        id: space-bar@luchrioh
+      - type: extension.disable
+        id: ubuntu-dock@ubuntu.com
+      - type: extension.disable
+        id: ubuntu-appindicators@ubuntu.com
+      - type: extension.disable
+        id: ding@rastersoft.com
+

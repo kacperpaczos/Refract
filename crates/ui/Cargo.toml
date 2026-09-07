@@ -1,0 +1,16 @@
+[package]
+name = "ui"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+domain.workspace = true
+app.workspace = true
+gtk4.workspace = true
+anyhow.workspace = true
+log.workspace = true
+env_logger.workspace = true
+chrono.workspace = true
+simplelog.workspace = true
+infra = { version = "0.1.0", path = "../infra" }
+serde_json.workspace = true

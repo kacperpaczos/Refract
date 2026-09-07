@@ -1,0 +1,71 @@
+id: tiling
+label: Tiling (Forge)
+preview: tiling
+description: Niezwykle wydajny Tiling Window Manager.
+spec_version: 1
+provider: upstream-gnome
+variant: tiling-forge
+capabilities_required:
+  - dconf
+  - extensions.install
+  - extensions.disable
+  - gnome.shell_reload
+capabilities_optional:
+  - health_checks
+  - preflight_checks
+degraded_behavior: Keep keyboard-oriented workflow even if non-essential shell extras fail.
+rollback_policy: snapshot
+desktops:
+  gnome:
+    post_flight_wait_ms: 2000
+    preflight_checks:
+      - type: bash
+        command: "command -v dconf >/dev/null"
+    health_checks:
+      - type: gsetting_check
+        schema: org.gnome.desktop.wm.preferences
+        key: button-layout
+        expected: "':minimize,maximize,close'"
+      - type: bash
+        command: "gsettings get org.gnome.shell enabled-extensions | grep -q 'forge@jmmaranan.com'"
+    steps:
+      # Instalacja rozszerzeń
+      - type: extension.install
+        id: arcmenu@arcmenu.com
+      - type: extension.install
+        id: forge@jmmaranan.com
+      - type: extension.install
+        id: space-bar@luchrioh
+      - type: extension.install
+        id: appindicatorsupport@rgcjonas.gmail.com
+      - type: extension.install
+        id: gnome-ui-tune@itstime.tech
+
+      # Konfiguracja tiling przez dconf load
+      - type: dconf
+        path: /org/gnome/
+        action: load
+        data: |
+          [shell/extensions/arcmenu]
+          menu-layout='GnomeOverview'
+          menu-button-icon='Distro_Icon'
+          distro-icon=3
+          custom-menu-button-icon-size=20
+
+          [shell/extensions/space-bar/shortcuts]
+          open-menu=@as []
+
+          [desktop/wm/preferences]
+          button-layout=':minimize,maximize,close'
+
+      # Odświeżenie
+      - type: gnome.shell_reload
+        wait_ms: 2500
+
+      # Wyłącz konflikty
+      - type: extension.disable
+        id: dash-to-panel@jderose9.github.com
+      - type: extension.disable
+        id: material-shell@papyelgringo
+      - type: extension.disable
+        id: dash-to-dock@micxgx.gmail.com

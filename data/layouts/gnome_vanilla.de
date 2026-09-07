@@ -1,0 +1,53 @@
+id: gnome_vanilla
+label: GNOME Vanilla (Synthesis)
+preview: gnome
+description: Czysty GNOME bez rozszerzeń layoutowych.
+spec_version: 1
+provider: synthesis
+variant: gnome-vanilla
+capabilities_required:
+  - gsettings
+  - extensions.disable
+capabilities_optional:
+  - preflight_checks
+  - health_checks
+degraded_behavior: Keep pure GNOME defaults even if some extension disable actions fail.
+rollback_policy: snapshot
+desktops:
+  gnome:
+    preflight_checks:
+      - type: bash
+        command: "command -v gsettings >/dev/null"
+    health_checks:
+      - type: bash
+        command: "gsettings get org.gnome.shell enabled-extensions | grep -q '^@as \\[\\]$'"
+    steps:
+      - type: bash
+        command: "gsettings set org.gnome.shell enabled-extensions '[]'"
+      - type: bash
+        command: "gsettings set org.gnome.shell disabled-extensions '[]'"
+      - type: bash
+        command: "gsettings set org.gnome.desktop.wm.preferences button-layout ':close'"
+      - type: extension.disable
+        id: dash-to-dock@micxgx.gmail.com
+      - type: extension.disable
+        id: dash-to-panel@jderose9.github.com
+      - type: extension.disable
+        id: arcmenu@arcmenu.com
+      - type: extension.disable
+        id: appindicatorsupport@rgcjonas.gmail.com
+      - type: extension.disable
+        id: gtk4-ding@smedius.gitlab.com
+      - type: extension.disable
+        id: ubuntu-dock@ubuntu.com
+      - type: extension.disable
+        id: ubuntu-appindicators@ubuntu.com
+      - type: extension.disable
+        id: ding@rastersoft.com
+      - type: extension.disable
+        id: material-shell@papyelgringo
+      - type: extension.disable
+        id: forge@jmmaranan.com
+      - type: extension.disable
+        id: space-bar@luchrioh
+

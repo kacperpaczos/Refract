@@ -1,0 +1,69 @@
+id: dock_bottom
+label: Dock Bottom (Linexin Base)
+preview: manjaro
+description: Lekki układ z dockiem na dole oparty o bazę Linexin.
+spec_version: 1
+provider: synthesis
+variant: linexin-dock-bottom
+capabilities_required:
+  - dconf
+  - gsettings
+  - extensions.install
+  - extensions.disable
+  - gnome.shell_reload
+capabilities_optional:
+  - preflight_checks
+  - health_checks
+degraded_behavior: Keep bottom dock layout even if optional helpers cannot be enabled.
+rollback_policy: snapshot
+desktops:
+  gnome:
+    post_flight_wait_ms: 1500
+    preflight_checks:
+      - type: bash
+        command: "command -v dconf >/dev/null"
+      - type: bash
+        command: "command -v gsettings >/dev/null"
+    health_checks:
+      - type: bash
+        command: "gsettings get org.gnome.shell enabled-extensions | grep -q 'dash-to-dock@micxgx.gmail.com'"
+    steps:
+      - type: extension.install
+        id: dash-to-dock@micxgx.gmail.com
+      - type: extension.install
+        id: appindicatorsupport@rgcjonas.gmail.com
+      - type: dconf
+        path: /org/gnome/
+        action: load
+        data: |
+          [shell/extensions/dash-to-dock]
+          dash-max-icon-size=48
+          dock-position='BOTTOM'
+          extend-height=false
+          dock-fixed=false
+          show-mounts=false
+          show-show-apps-button=true
+
+          [desktop/wm/preferences]
+          button-layout='close,minimize,maximize:'
+      - type: gnome.shell_reload
+        wait_ms: 2500
+      - type: extension.disable
+        id: dash-to-panel@jderose9.github.com
+      - type: extension.disable
+        id: arcmenu@arcmenu.com
+      - type: extension.disable
+        id: gtk4-ding@smedius.gitlab.com
+      - type: extension.disable
+        id: material-shell@papyelgringo
+      - type: extension.disable
+        id: forge@jmmaranan.com
+      - type: extension.disable
+        id: space-bar@luchrioh
+      - type: extension.disable
+        id: ubuntu-dock@ubuntu.com
+      - type: extension.disable
+        id: ubuntu-appindicators@ubuntu.com
+      - type: extension.disable
+        id: ding@rastersoft.com
+

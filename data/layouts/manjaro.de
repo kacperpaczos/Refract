@@ -1,0 +1,60 @@
+id: manjaro
+label: Manjaro
+preview: manjaro
+description: Manjaro z dockiem
+spec_version: 1
+provider: upstream-gnome
+variant: manjaro-like
+capabilities_required:
+  - dconf
+  - extensions.install
+  - extensions.disable
+  - gnome.shell_reload
+capabilities_optional:
+  - health_checks
+  - preflight_checks
+degraded_behavior: Apply dock and shell defaults even if auxiliary extensions fail.
+rollback_policy: snapshot
+desktops:
+  gnome:
+    post_flight_wait_ms: 1500
+    preflight_checks:
+      - type: bash
+        command: "command -v dconf >/dev/null"
+    health_checks:
+      - type: bash
+        command: "gsettings get org.gnome.shell enabled-extensions | grep -q 'dash-to-dock@micxgx.gmail.com'"
+    steps:
+      # Instalacja rozszerzeń
+      - type: extension.install
+        id: dash-to-dock@micxgx.gmail.com
+      - type: extension.install
+        id: appindicatorsupport@rgcjonas.gmail.com
+      - type: extension.install
+        id: gnome-ui-tune@itstime.tech
+
+      # Konfiguracja dock'a przez dconf - omija brakujący jeszcze gsettings schema
+      - type: dconf
+        path: /org/gnome/
+        action: load
+        data: |
+          [shell/extensions/dash-to-dock]
+          dock-position='BOTTOM'
+          extend-height=false
+          dock-fixed=false
+
+      # Odświeżenie sesji
+      - type: gnome.shell_reload
+        wait_ms: 2000
+
+      # Wyłącz konflikty
+      - type: extension.disable
+        id: arcmenu@arcmenu.com
+      - type: extension.disable
+        id: dash-to-panel@jderose9.github.com
+      - type: extension.disable
+        id: material-shell@papyelgringo
+      - type: extension.disable
+        id: forge@jmmaranan.com
+      - type: extension.disable
+        id: space-bar@luchrioh
