@@ -1,0 +1,9 @@
+{
+  "name": "SNAPD Permission Prompting",
+  "description": "A GNOME Shell extension to make the SNAPD prompts to be properly integrated",
+  "uuid": "snapd-prompting@canonical.com",
+  "shell-version": [
+    "49",
+    "50"
+  ]
+}

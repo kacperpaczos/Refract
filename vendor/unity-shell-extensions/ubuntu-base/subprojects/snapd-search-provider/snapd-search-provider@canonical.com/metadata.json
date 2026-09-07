@@ -1,0 +1,12 @@
+{
+  "name": "Snapd Search Provider",
+  "description": "A search provider for GNOME shell to search into installable snaps",
+  "uuid": "snapd-search-provider@canonical.com",
+  "url": "https://gitlab.gnome.org/Community/Ubuntu/gnome-shell-snapd-search-provider",
+  "gettext-domain": "gnome-shell-snapd-search-provider",
+  "shell-version": [
+    "48",
+    "49",
+    "50"
+  ]
+}

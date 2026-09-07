@@ -1,0 +1,179 @@
+gnome-shell-ubuntu-extensions (50.26.04.6ubuntu) resolute; urgency=medium
+
+  * subprojects/tiling-assisant: Track ubuntu fork:
+    - Fix tiling windows with touch input (LP: #2146553)
+
+ -- Alessandro Astone <alessandro.astone@canonical.com>  Fri, 03 Apr 2026 17:52:36 +0200
+
+gnome-shell-ubuntu-extensions (50.26.04.5ubuntu) resolute; urgency=medium
+
+  * subprojects/dash-to-dock: Override stylesheet in ubuntu session
+    (LP: #2147044)
+  * subprojects/appindicators: Bump to latest upstream commit.
+    It fixes a variable name, no further changes
+  * subprojects/dash-to-dock: Use configured data-dir for non /usr installs
+  * desktop-icons-ng: Use extension from ubuntu-fork rather than adding patches.
+    It makes it easier to handle the changes without using diff files.
+    There is no contents change with this
+  * subprojects/desktop-icons-ng: Update to latest version:
+    - Take border in account when creating the drag surface (LP: #2147051)
+    - Do not use deprecated namespace for Gio and GLib unix methods
+      (LP: #2146010)
+    - fileItem: Properly use Gdk activation context (LP: #2146022)
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Wed, 01 Apr 2026 21:48:42 +0200
+
+gnome-shell-ubuntu-extensions (50.26.04.4ubuntu) resolute; urgency=medium
+
+  * subprojects/pacakagefiles/dash-to-dock: Use meson to generate translations.
+    Fixes missing translations in launchpad
+  * desktop-icons-ng: Update to latest upstream commit (helps with LP: #2145766)
+  * desktop-icons: Add upstream-proposed patches to adjust selection colors
+    (LP: #2145766)
+  * appindicators: Update to latest upstream release (LP: #2080221, #2144767,
+    LP: #2145134, Helps with: lp:2080221)
+  * appindicators: Ignore wrong lint error due to old eslint in debian
+  * appindicators: Handle an upstream fix for an init failure (LP: #2144485)
+  * snapd-search-provider: Update to new upstream release (LP: #2144769,
+    LP: #2145767)
+  * dash-to-dock: Update to new upstream release
+    (LP: #1966681, #2142990, #2144460)
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Mon, 23 Mar 2026 22:51:20 +0100
+
+gnome-shell-ubuntu-extensions (50.26.04.3ubuntu) resolute; urgency=medium
+
+  [ Sergio Costas Rodriguez ]
+  * Update DING to 49.99.1.
+    This version supports changing the icon size using the keyboard,
+    and one extra translation.
+
+  [ Marco Trevisan (Treviño) ]
+  * debian/control: Adjust Breaks/Replace on gnome-shell-common.
+    The prompting extension was in the common package, as it should have
+    been so we need to break on that
+  * debian/gbp.conf: Set per-project fake cleaner
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Wed, 18 Feb 2026 16:46:46 +0100
+
+gnome-shell-ubuntu-extensions (50.26.04.2ubuntu) resolute; urgency=medium
+
+  * debian/gjs-check-runtime-dependencies: Support parsing multiple paths
+  * supbprojects: Include snapd search provider extension
+  * d/control: Add dependency on gir1.2-snapd-2
+  * subprojects: Include web-search-provider extension
+  * tiling-assistant: Add LINGUAS and POTFILES.
+    Ideally we should generate these, but this is good enough for now
+  * debian/rules: Override dh_translations to generate pot files
+    dh_translations is not good enough when it comes to handle subprojects
+  * debian/control: Use dh-sequence-translations
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Tue, 17 Feb 2026 05:12:42 +0100
+
+gnome-shell-ubuntu-extensions (50.26.04.1ubuntu) resolute; urgency=medium
+
+  * subprojects/tiling-assistant: Bump to v54
+  * subprojects: Add snapd-prompting extension
+  * Add breaks/replaces on gnome-shell 50~beta
+  * subprojects/appindicators: Bump to v63
+  * subprojects/dash-to-dock: Bump version of dash 2 dock
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 12 Feb 2026 06:44:25 +0100
+
+gnome-shell-ubuntu-extensions (49.26.04.2ubuntu) resolute; urgency=medium
+
+  * Fix previous upload, the source needs to be build using gbp-buildpackage
+    since it relies on prebuild hooks to fetch the content
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Thu, 29 Jan 2026 13:48:29 +0100
+
+gnome-shell-ubuntu-extensions (49.26.04.1ubuntu) resolute; urgency=medium
+
+  [ Marco Trevisan (Treviño) ]
+  * debian/control: Use Conflicts instead of Breaks.
+  * subprojects/tiling-assisant: Use latest upstream commit.
+    It includes the same patch we include in ubuntu right now to support
+    GNOME 50, plus some further upstream fixes (related to it)
+  * desktop-icons-ng: Update to 49.99.0:
+    - Support for Gnome Shell 50.alpha
+    - Disable search autohide if keyboard or screen reader A11Y are enabled
+    - Added A11Y roles to the home and trash folders
+    - Fixed accessibility for .desktop files
+    - Adjust margins in RTL systems (thanks to Sundeep Mediratta)
+    - Use the accent color if available
+  * README: Point to debian-specific packaging docs
+  * debian/copyright: Update copyright files to be compliant with lrc
+  * debian/copyright: Include missing license texts
+  * debian/find-supported-shell-versions: Fix computation of the max version
+
+  [ Adrian Dombeck ]
+  * debian/lrc.config: Exclude appindicators patches
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Wed, 28 Jan 2026 15:11:29 +0100
+
+gnome-shell-ubuntu-extensions (49.26.04.0ubuntu) resolute; urgency=medium
+
+  * build: Include all supported extensions as meson subprojects
+    Manage all the extensions as a meson subproject, so that we can package
+    them atomically and ensure that the whole ecosystem works when tested.
+    Reduce patches when possible, using build system overrides.
+  * debian/control: Update standards versions
+  * debian/control: Remove deprecated rules requires root
+  * debian: Update packaging to use subprojects sources
+  * debian: Automate computing the required gnome-shell versions
+    Find the minimum and maximum gnome-shell versions we support by
+    inspecting all the metadata files that we have installed, so that there
+    is no risk that we produce a package that is installable if any of the
+    extension is not supported by the gnome-shell version that we target
+  * debian/README.source: Document the project structure
+  * debian/gjs-check-runtime-dependencies.sh:
+    Simple tool to check and track runtime dependencies
+  * debian/tests: Add autopkgtest
+  * ci: Add workflow that checks the package build
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Tue, 09 Dec 2025 18:48:13 +0100
+
+gnome-shell-ubuntu-extensions (49.0) questing; urgency=medium
+
+  * Update for GNOME Shell 49 and later, removing strict version requirements
+    already enforced in the individual extensions. It doesn't make sense to
+    have to bump the dependencies here too.
+
+ -- Daniel van Vugt <daniel.van.vugt@canonical.com>  Wed, 16 Jul 2025 13:26:45 +0800
+
+gnome-shell-ubuntu-extensions (48.0) plucky; urgency=medium
+
+  * Update for GNOME Shell 48
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Wed, 12 Feb 2025 22:03:06 -0500
+
+gnome-shell-ubuntu-extensions (47.0) oracular; urgency=medium
+
+  * Update for GNOME Shell 47
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 13 Aug 2024 15:06:35 -0400
+
+gnome-shell-ubuntu-extensions (46.0) noble; urgency=medium
+
+  * Stop using debian/control.in and dh_gnome_clean
+  * Update for GNOME Shell 46
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 16 Apr 2024 14:20:43 -0400
+
+gnome-shell-ubuntu-extensions (45.1) mantic; urgency=medium
+
+  * Fix package name for tiling assistant
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Thu, 24 Aug 2023 13:23:07 -0400
+
+gnome-shell-ubuntu-extensions (45.0) mantic; urgency=medium
+
+  * Update minimum extension versions for GNOME Shell 45
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Thu, 24 Aug 2023 12:52:56 -0400
+
+gnome-shell-ubuntu-extensions (44.0) mantic; urgency=medium
+
+  * Initial release.
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 04 May 2023 16:12:01 +0200

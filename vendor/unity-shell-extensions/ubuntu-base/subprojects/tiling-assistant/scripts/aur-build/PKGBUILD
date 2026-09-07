@@ -1,0 +1,42 @@
+# Maintainer: Leleat
+# Contributor: VeldoraTheDragon <127216238+VeldoraTheDragon@users.noreply.github.com>
+
+pkgname=gnome-shell-extension-tiling-assistant
+pkgver=54
+pkgrel=1
+pkgdesc="A GNOME Shell extension to expand GNOME's native 2 column design."
+arch=('x86_64')
+url="https://github.com/Leleat/Tiling-Assistant"
+license=('GPL2')
+depends=('gnome-shell')
+install='INSTALL'
+makedepends=('gettext')
+provides=("${pkgname}")
+conflicts=("${pkgname}")
+source=("${pkgname}::git+https://github.com/Leleat/Tiling-Assistant.git#tag=v${pkgver}")
+sha256sums=('SKIP')
+
+_uuid="tiling-assistant@leleat-on-github"
+
+prepare() {
+    install -dm755 "${srcdir}/${pkgname}/${_uuid}/locale"
+}
+
+build() {
+	cd "${srcdir}/${pkgname}/${_uuid}"
+
+	# compile gschema
+	glib-compile-schemas ./schemas/
+
+	# compile tl
+	for FILE in ${srcdir}/${pkgname}/translations/*.po; do
+		LANG=$(basename "$FILE" .po)
+		mkdir -p "${srcdir}/${pkgname}/${_uuid}/locale/$LANG/LC_MESSAGES"
+		msgfmt -c "$FILE" -o "${srcdir}/${pkgname}/${_uuid}/locale/$LANG/LC_MESSAGES/${_uuid}.mo"
+	done
+}
+
+package() {
+	install -dm755 "${pkgdir}/usr/share/gnome-shell/extensions"
+	cp -r "${srcdir}/${pkgname}/${_uuid}" "${pkgdir}/usr/share/gnome-shell/extensions/${_uuid}"
+}
